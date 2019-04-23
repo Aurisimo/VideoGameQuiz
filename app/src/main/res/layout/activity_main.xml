@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView_main_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".MainActivity">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout_main_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_main_big"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView_main_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/header_dummy"
+            android:textSize="@dimen/text_size_main_big" />
+
+        <TextView
+            android:id="@+id/textView_main_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_main_medium"
+            android:text="@string/header_progress_dummy" />
+
+        <View
+            android:id="@+id/divider0"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_main_devider_medium"
+            android:background="#BDBDBD" />
+
+        <ImageView
+            android:id="@+id/imageView_main_question_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_main_image_medium"
+            android:layout_marginTop="@dimen/margin_top_main_medium"
+            android:baselineAligned="false"
+            android:scaleType="fitCenter" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_main_devider_medium"
+            android:layout_marginTop="@dimen/margin_top_main_medium"
+            android:background="#BDBDBD" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout_main_many_answers_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_main_medium"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/checkBox_main_answer0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_answer0_dummy" />
+
+            <CheckBox
+                android:id="@+id/checkBox_main_answer1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_answer1_dummy" />
+
+            <CheckBox
+                android:id="@+id/checkBox_main_answer2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_answer2_dummy" />
+
+            <CheckBox
+                android:id="@+id/checkBox_main_answer3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_answer3_dummy" />
+
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/radioGroup_main_one_answer_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_main_medium">
+
+            <RadioButton
+                android:id="@+id/radioButton_main_answer0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/label_answer0_dummy" />
+
+            <RadioButton
+                android:id="@+id/radioButton_main_answer1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/label_answer1_dummy" />
+
+            <RadioButton
+                android:id="@+id/radioButton_main_answer2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/label_answer2_dummy" />
+
+            <RadioButton
+                android:id="@+id/radioButton_main_answer3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/label_answer3_dummy" />
+        </RadioGroup>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_main_devider_medium"
+            android:layout_marginTop="@dimen/margin_top_main_medium"
+            android:layout_weight="1"
+            android:background="#BDBDBD" />
+
+        <Button
+            android:id="@+id/button_main_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_main_medium"
+            android:onClick="nextQuestion"
+            android:text="@string/label_next" />
+
+        <Button
+            android:id="@+id/button_main_show_results"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="showResults"
+            android:text="@string/label_results" />
+
+        <Button
+            android:id="@+id/button_main_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="again"
+            android:text="@string/label_again" />
+
+    </LinearLayout>
+</ScrollView>

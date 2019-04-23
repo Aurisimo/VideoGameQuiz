@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Video Game Quiz</string>
+    <string name="header_dummy">Question</string>
+    <string name="header_progress_dummy" >1 of 99</string>
+    <string name="message_results">Results</string>
+    <string name="message_question">Question</string>
+    <string name="message_correct">Correct</string>
+    <string name="message_incorrect">Incorrect</string>
+    <string name="label_answer0_dummy">Answer 0</string>
+    <string name="label_answer1_dummy">Answer 1</string>
+    <string name="label_answer2_dummy">Answer 2</string>
+    <string name="label_answer3_dummy">Answer 3</string>
+    <string name="label_next">Next</string>
+    <string name="label_results">Results</string>
+    <string name="label_again">Again</string>
+    <string name="label_of">of</string>
+    <string name="message_total_answers">Total correct answers:</string>
+    <string name="header_many_answers_question">Which video games were created by</string>
+    <string name="header_one_answer_question">Which company created video game</string>
+</resources>
