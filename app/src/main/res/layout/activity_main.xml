@@ -52,82 +52,82 @@
             android:background="@color/colorBackgroundDevider" />
 
         <LinearLayout
-            android:id="@+id/linearLayout_main_many_answers_question"
+            android:id="@+id/linearLayout_main_many_options_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_top_main_medium"
             android:orientation="vertical">
 
             <CheckBox
-                android:id="@+id/checkBox_main_answer0"
+                android:id="@+id/checkBox_main_option0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/label_answer0_dummy" />
+                android:text="@string/label_option0_dummy" />
 
             <CheckBox
-                android:id="@+id/checkBox_main_answer1"
+                android:id="@+id/checkBox_main_option1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/label_answer1_dummy" />
+                android:text="@string/label_option1_dummy" />
 
             <CheckBox
-                android:id="@+id/checkBox_main_answer2"
+                android:id="@+id/checkBox_main_option2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/label_answer2_dummy" />
+                android:text="@string/label_option2_dummy" />
 
             <CheckBox
-                android:id="@+id/checkBox_main_answer3"
+                android:id="@+id/checkBox_main_option3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/label_answer3_dummy" />
+                android:text="@string/label_option3_dummy" />
 
         </LinearLayout>
 
         <RadioGroup
-            android:id="@+id/radioGroup_main_one_answer_question"
+            android:id="@+id/radioGroup_main_one_option_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_top_main_medium">
 
             <RadioButton
-                android:id="@+id/radioButton_main_answer0"
+                android:id="@+id/radioButton_main_option0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/label_answer0_dummy" />
+                android:text="@string/label_option0_dummy" />
 
             <RadioButton
-                android:id="@+id/radioButton_main_answer1"
+                android:id="@+id/radioButton_main_option1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/label_answer1_dummy" />
+                android:text="@string/label_option1_dummy" />
 
             <RadioButton
-                android:id="@+id/radioButton_main_answer2"
+                android:id="@+id/radioButton_main_option2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/label_answer2_dummy" />
+                android:text="@string/label_option2_dummy" />
 
             <RadioButton
-                android:id="@+id/radioButton_main_answer3"
+                android:id="@+id/radioButton_main_option3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/label_answer3_dummy" />
+                android:text="@string/label_option3_dummy" />
         </RadioGroup>
 
         <EditText
-            android:id="@+id/editText_main_answer"
+            android:id="@+id/editText_main_option"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_top_main_medium"
             android:ems="10"
-            android:hint="@string/hint_enter_answer"
+            android:hint="@string/hint_enter_option"
             android:inputType="textPersonName"
-            android:text="@string/entry_answer_dummy" />
+            android:text="@string/entry_option_dummy" />
 
         <View
             android:id="@+id/divider2"

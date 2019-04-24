@@ -1,13 +1,12 @@
 package com.example.android.videogamequiz;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.example.android.videogamequiz.Constants.ANSWER_LIMIT;
+import static com.example.android.videogamequiz.Constants.OPTION_LIMIT;
 import static com.example.android.videogamequiz.Constants.QUESTION_LIMIT;
 
 public class QuestionUtils {
@@ -21,10 +20,10 @@ public class QuestionUtils {
 
             QuestionType type = getRandomType();
 
-            if (type == QuestionType.OneCorrectAnswer) {
-                questions.add(generateOneCorrectAnswerQuestion(companies, i, context));
+            if (type == QuestionType.OneCorrectOption) {
+                questions.add(generateOneCorrectOptionQuestion(companies, i, context));
             } else {
-                questions.add(generateManyCorrectAnswersQuestion(companies, i, context));
+                questions.add(generateManyCorrectOptionsQuestion(companies, i, context));
             }
         }
 
@@ -36,8 +35,8 @@ public class QuestionUtils {
     private static <E> void shuffleList(List<E> list) {
         for (int i = 0; i < list.size(); i++) {
 
-            int answerToSwapWithLocation = random.nextInt(list.size());
-            swapElements(list, i, answerToSwapWithLocation);
+            int optionToSwapWithLocation = random.nextInt(list.size());
+            swapElements(list, i, optionToSwapWithLocation);
         }
     }
 
@@ -48,38 +47,38 @@ public class QuestionUtils {
         list.set(element2Location, temp);
     }
 
-    private static Question generateManyCorrectAnswersQuestion(List<Company> companies, int pickedCompanyLocation, Context context) {
+    private static Question generateManyCorrectOptionsQuestion(List<Company> companies, int pickedCompanyLocation, Context context) {
         Company company = companies.get(pickedCompanyLocation);
-        List<Answer> answers = generateAnswersForManyCorrectAnswersQuestion(companies, pickedCompanyLocation, company);
+        List<Option> options = generateOptionsForManyCorrectOptionsQuestion(companies, pickedCompanyLocation, company);
 
-        return new Question(company.getCompanyLogoResid(), context.getString(R.string.header_many_answers_question) + " " + company.getCompanyName(),
-                answers, QuestionType.ManyCorrectAnswers);
+        return new Question(company.getCompanyLogoResid(), context.getString(R.string.header_many_options_question) + " " + company.getCompanyName(),
+                options, QuestionType.ManyCorrectOptions);
     }
 
-    private static List<Answer> generateAnswersForManyCorrectAnswersQuestion(List<Company> companies, int pickedCompanyLocation, Company company) {
-        List<Answer> generatedAnswers = new ArrayList<>();
+    private static List<Option> generateOptionsForManyCorrectOptionsQuestion(List<Company> companies, int pickedCompanyLocation, Company company) {
+        List<Option> generatedOptions = new ArrayList<>();
 
-        int correctAnswerGameLocation = random.nextInt(company.getGames().size());
-        Game correctAnswerGame = company.getGames().get(correctAnswerGameLocation);
-        generatedAnswers.add(new Answer(correctAnswerGame.getTitle(), true));
+        int correctOptionGameLocation = random.nextInt(company.getGames().size());
+        Game correctOptionGame = company.getGames().get(correctOptionGameLocation);
+        generatedOptions.add(new Option(correctOptionGame.getTitle(), true));
         List<Integer> checkedGamesOfPickedCompany = new ArrayList<>();
-        checkedGamesOfPickedCompany.add(correctAnswerGameLocation);
+        checkedGamesOfPickedCompany.add(correctOptionGameLocation);
 
         List<Integer> checkedCompanyLocations = new ArrayList<>();
         checkedCompanyLocations.add(pickedCompanyLocation);
 
-        for (int i = 1; i < ANSWER_LIMIT; i++) {
+        for (int i = 1; i < OPTION_LIMIT; i++) {
             Game game;
             boolean isCorrect;
             if (random.nextBoolean()) {
-                int randomCorrectAnswerGameLocation = random.nextInt(company.getGames().size());
-                while (checkedGamesOfPickedCompany.contains(randomCorrectAnswerGameLocation)) {
-                    randomCorrectAnswerGameLocation = random.nextInt(company.getGames().size());
+                int randomCorrectOptionGameLocation = random.nextInt(company.getGames().size());
+                while (checkedGamesOfPickedCompany.contains(randomCorrectOptionGameLocation)) {
+                    randomCorrectOptionGameLocation = random.nextInt(company.getGames().size());
                 }
 
-                checkedGamesOfPickedCompany.add(randomCorrectAnswerGameLocation);
+                checkedGamesOfPickedCompany.add(randomCorrectOptionGameLocation);
 
-                game = company.getGames().get(randomCorrectAnswerGameLocation);
+                game = company.getGames().get(randomCorrectOptionGameLocation);
                 isCorrect = true;
             } else {
                 int randomCompanyLocation = random.nextInt(companies.size());
@@ -95,53 +94,53 @@ public class QuestionUtils {
                 isCorrect = false;
             }
 
-            generatedAnswers.add(new Answer(game.getTitle(), isCorrect));
+            generatedOptions.add(new Option(game.getTitle(), isCorrect));
         }
 
-        shuffleList(generatedAnswers);
+        shuffleList(generatedOptions);
 
-        return generatedAnswers;
+        return generatedOptions;
     }
 
-    private static Question generateOneCorrectAnswerQuestion(List<Company> companies, int pickedCompanyLocation, Context context) {
+    private static Question generateOneCorrectOptionQuestion(List<Company> companies, int pickedCompanyLocation, Context context) {
         Company company = companies.get(pickedCompanyLocation);
         int randomGameLocation = random.nextInt(company.getGames().size());
         Game game = company.getGames().get(randomGameLocation);
-        List<Answer> answers = generateAnswersForOneCorrectAnswerQuestion(companies, pickedCompanyLocation, company);
+        List<Option> options = generateOptionsForOneCorrectOptionQuestion(companies, pickedCompanyLocation, company);
 
-        return new Question(game.getImageResid(), context.getString(R.string.header_one_answer_question) + " " + game.getTitle(),
-                answers, QuestionType.OneCorrectAnswer);
+        return new Question(game.getImageResid(), context.getString(R.string.header_one_option_question) + " " + game.getTitle(),
+                options, QuestionType.OneCorrectOption);
     }
 
-    private static List<Answer> generateAnswersForOneCorrectAnswerQuestion(List<Company> companies, int pickedCompanyLocation,
+    private static List<Option> generateOptionsForOneCorrectOptionQuestion(List<Company> companies, int pickedCompanyLocation,
                                                                            Company company) {
-        List<Answer> generatedAnswers = new ArrayList<>();
+        List<Option> generatedOptions = new ArrayList<>();
 
-        generatedAnswers.add(new Answer(company.getCompanyName(), true));
+        generatedOptions.add(new Option(company.getCompanyName(), true));
 
         List<Integer> checkedCompanyLocations = new ArrayList<>();
         checkedCompanyLocations.add(pickedCompanyLocation);
 
-        for (int i = 1; i < ANSWER_LIMIT; i++) {
+        for (int i = 1; i < OPTION_LIMIT; i++) {
             int randomCompanyLocation = random.nextInt(companies.size());
             while (checkedCompanyLocations.contains(randomCompanyLocation)) {
                 randomCompanyLocation = random.nextInt(companies.size());
             }
 
             checkedCompanyLocations.add(randomCompanyLocation);
-            generatedAnswers.add(new Answer(companies.get(randomCompanyLocation).getCompanyName(), false));
+            generatedOptions.add(new Option(companies.get(randomCompanyLocation).getCompanyName(), false));
         }
 
-        shuffleList(generatedAnswers);
+        shuffleList(generatedOptions);
 
-        return generatedAnswers;
+        return generatedOptions;
     }
 
     private static QuestionType getRandomType() {
         if (random.nextBoolean()) {
-            return QuestionType.OneCorrectAnswer;
+            return QuestionType.OneCorrectOption;
         }
 
-        return QuestionType.ManyCorrectAnswers;
+        return QuestionType.ManyCorrectOptions;
     }
 }

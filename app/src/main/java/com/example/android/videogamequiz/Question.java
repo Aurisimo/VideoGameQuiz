@@ -5,28 +5,28 @@ import java.util.List;
 public class Question {
     private int imageResid;
     private String message;
-    private List<Answer> answers;
+    private List<Option> options;
     private QuestionType type;
-    private int correctAnswerAmount;
+    private int correctOptionAmount;
 
-    public Question(int imageResid, String message, List<Answer> answers, QuestionType type) {
+    public Question(int imageResid, String message, List<Option> options, QuestionType type) {
         this.imageResid = imageResid;
         this.message = message;
-        this.answers = answers;
+        this.options = options;
         this.type = type;
 
-        correctAnswerAmount = calculateCorrectAnswerAmount(answers);
+        correctOptionAmount = calculateCorrectOptionAmount(options);
     }
 
-    public int getCorrectAnswerAmount() {
-        return correctAnswerAmount;
+    public int getCorrectOptionAmount() {
+        return correctOptionAmount;
     }
 
-    private int calculateCorrectAnswerAmount(List<Answer> answers) {
+    private int calculateCorrectOptionAmount(List<Option> options) {
         int amount = 0;
 
-        for (Answer answer : answers) {
-            if (answer.isCorrect()) {
+        for (Option option : options) {
+            if (option.isCorrect()) {
                 amount++;
             }
         }
@@ -46,8 +46,8 @@ public class Question {
         return message;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
+    public List<Option> getOptions() {
+        return options;
     }
 
 

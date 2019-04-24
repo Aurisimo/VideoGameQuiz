@@ -1,10 +1,10 @@
 package com.example.android.videogamequiz;
 
-public class Answer {
+public class Option {
     private String message;
     private boolean isCorrect;
 
-    public Answer(String message, boolean isCorrect) {
+    public Option(String message, boolean isCorrect) {
         this.message = message;
         this.isCorrect = isCorrect;
     }

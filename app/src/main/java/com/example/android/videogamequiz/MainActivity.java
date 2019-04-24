@@ -1,9 +1,9 @@
 package com.example.android.videogamequiz;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -13,21 +13,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 import java.util.Random;
 
-import static com.example.android.videogamequiz.Constants.ANSWER_LIMIT;
+import static com.example.android.videogamequiz.Constants.OPTION_LIMIT;
 
 public class MainActivity extends AppCompatActivity {
 
     private List<Company> companies;
     private List<Question> questions;
     private int currentQuestionLocation;
-    private int counterOfCorrectAnswers;
+    private int counterOfCorrectOptions;
     private boolean[] results;
     private Random random;
 
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         random = new Random();
 
-        setupAnswerViewListeners();
+        setupOptionViewListeners();
 
         companies = CompanyRepository.getCompanies();
 
@@ -62,8 +61,10 @@ public class MainActivity extends AppCompatActivity {
 
         Button resultsButton = findViewById(R.id.button_main_show_results);
         resultsButton.setVisibility(View.INVISIBLE);
-
-        enableAnswers(true);
+        
+        enableOptions(true);
+        
+        resetOptions();
     }
 
     private void displayProgress() {
@@ -71,47 +72,53 @@ public class MainActivity extends AppCompatActivity {
         progressTextView.setText((currentQuestionLocation + 1) + " " + getString(R.string.label_of) + " " + questions.size());
     }
 
-    private void setupAnswerViewListeners() {
+    private void setupOptionViewListeners() {
 
-        for (int i = 0; i < ANSWER_LIMIT; i++) {
-            int answerCheckBoxResid = getAnswerCheckBoxResid(i);
-            CheckBox answerCheckBox = findViewById(answerCheckBoxResid);
-            answerCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        for (int i = 0; i < OPTION_LIMIT; i++) {
+            int optionCheckBoxResid = getOptionCheckBoxResid(i);
+            CheckBox optionCheckBox = findViewById(optionCheckBoxResid);
+            optionCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if ((boolean) buttonView.getTag()) {
                         if (isChecked) {
-                            counterOfCorrectAnswers++;
+                            if ((boolean) buttonView.getTag()) {
+                                counterOfCorrectOptions++;
+                            } else {
+                                counterOfCorrectOptions--;
+                            }
                         } else {
-                            counterOfCorrectAnswers--;
+                            if ((boolean) buttonView.getTag()) {
+                                counterOfCorrectOptions--;
+                            } else {
+                                counterOfCorrectOptions++;
+                            }
                         }
 
-                        results[currentQuestionLocation] = questions.get(currentQuestionLocation).getCorrectAnswerAmount() == counterOfCorrectAnswers;
-                    }
+                        results[currentQuestionLocation] = questions.get(currentQuestionLocation).getCorrectOptionAmount() == counterOfCorrectOptions;
                 }
             });
 
-            int answerRadioButtonResid = getAnswerRadioButtonResid(i);
-            RadioButton answerRadioButton = findViewById(answerRadioButtonResid);
+            int optionRadioButtonResid = getOptionRadioButtonResid(i);
+            RadioButton optionRadioButton = findViewById(optionRadioButtonResid);
 
-            answerRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            optionRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if ((boolean) buttonView.getTag()) {
                         if (isChecked) {
-                            counterOfCorrectAnswers++;
+                            counterOfCorrectOptions++;
                         } else {
-                            counterOfCorrectAnswers--;
+                            counterOfCorrectOptions--;
                         }
 
-                        results[currentQuestionLocation] = counterOfCorrectAnswers == 1;
+                        results[currentQuestionLocation] = counterOfCorrectOptions == 1;
                     }
                 }
             });
         }
 
-        EditText answerEditText = findViewById(R.id.editText_main_answer);
-        answerEditText.addTextChangedListener(new TextWatcher() {
+        EditText optionEditText = findViewById(R.id.editText_main_option);
+        optionEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -124,11 +131,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String enteredAnswer = s.toString();
-                EditText answerEditText = findViewById(R.id.editText_main_answer);
-                String correctAnswer = (String)answerEditText.getTag();
-                results[currentQuestionLocation] = correctAnswer != null && enteredAnswer != null
-                        && enteredAnswer.toLowerCase().equals(correctAnswer.toLowerCase());
+                String enteredOption = s.toString();
+                EditText optionEditText = findViewById(R.id.editText_main_option);
+                String correctOption = (String)optionEditText.getTag();
+                results[currentQuestionLocation] = correctOption != null && enteredOption != null
+                        && enteredOption.toLowerCase().equals(correctOption.toLowerCase());
             }
         });
     }
@@ -142,21 +149,21 @@ public class MainActivity extends AppCompatActivity {
         ImageView questionImageView = findViewById(R.id.imageView_main_question_image);
         questionImageView.setImageResource(question.getImageResid());
 
-        LinearLayout manyAnswersQuestionLinearLayout = findViewById(R.id.linearLayout_main_many_answers_question);
-        LinearLayout oneAnswerQuestionRadioGroup = findViewById(R.id.radioGroup_main_one_answer_question);
-        EditText answerEditText = findViewById(R.id.editText_main_answer);
+        LinearLayout manyOptionsQuestionLinearLayout = findViewById(R.id.linearLayout_main_many_options_question);
+        LinearLayout oneOptionQuestionRadioGroup = findViewById(R.id.radioGroup_main_one_option_question);
+        EditText optionEditText = findViewById(R.id.editText_main_option);
 
-        if (question.getType() == QuestionType.ManyCorrectAnswers) {
+        if (question.getType() == QuestionType.ManyCorrectOptions) {
             int counter = 0;
-            for (Answer answer : question.getAnswers()) {
-                manyAnswersQuestionLinearLayout.setVisibility(View.VISIBLE);
-                oneAnswerQuestionRadioGroup.setVisibility(View.GONE);
-                answerEditText.setVisibility(View.GONE);
+            for (Option option : question.getOptions()) {
+                manyOptionsQuestionLinearLayout.setVisibility(View.VISIBLE);
+                oneOptionQuestionRadioGroup.setVisibility(View.GONE);
+                optionEditText.setVisibility(View.GONE);
 
-                int answerCheckBoxResid = getAnswerCheckBoxResid(counter);
-                CheckBox answerCheckBox = findViewById(answerCheckBoxResid);
-                answerCheckBox.setText(answer.getMessage());
-                answerCheckBox.setTag(answer.isCorrect());
+                int optionCheckBoxResid = getOptionCheckBoxResid(counter);
+                CheckBox optionCheckBox = findViewById(optionCheckBoxResid);
+                optionCheckBox.setText(option.getMessage());
+                optionCheckBox.setTag(option.isCorrect());
 
                 counter++;
             }
@@ -164,28 +171,28 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (random.nextBoolean()) {
                 int counter = 0;
-                for (Answer answer : question.getAnswers()) {
-                    manyAnswersQuestionLinearLayout.setVisibility(View.GONE);
-                    oneAnswerQuestionRadioGroup.setVisibility(View.VISIBLE);
-                    answerEditText.setVisibility(View.GONE);
+                for (Option option : question.getOptions()) {
+                    manyOptionsQuestionLinearLayout.setVisibility(View.GONE);
+                    oneOptionQuestionRadioGroup.setVisibility(View.VISIBLE);
+                    optionEditText.setVisibility(View.GONE);
 
-                    int answerRadioButtonResid = getAnswerRadioButtonResid(counter);
-                    RadioButton answerRadioButton = findViewById(answerRadioButtonResid);
+                    int optionRadioButtonResid = getOptionRadioButtonResid(counter);
+                    RadioButton optionRadioButton = findViewById(optionRadioButtonResid);
 
-                    answerRadioButton.setText(answer.getMessage());
-                    answerRadioButton.setTag(answer.isCorrect());
+                    optionRadioButton.setText(option.getMessage());
+                    optionRadioButton.setTag(option.isCorrect());
 
                     counter++;
                 }
             } else {
-                manyAnswersQuestionLinearLayout.setVisibility(View.GONE);
-                oneAnswerQuestionRadioGroup.setVisibility(View.GONE);
-                answerEditText.setVisibility(View.VISIBLE);
-                answerEditText.setText("");
+                manyOptionsQuestionLinearLayout.setVisibility(View.GONE);
+                oneOptionQuestionRadioGroup.setVisibility(View.GONE);
+                optionEditText.setVisibility(View.VISIBLE);
+                optionEditText.setText("");
 
-                for (Answer answer : question.getAnswers()) {
-                   if (answer.isCorrect()) {
-                        answerEditText.setTag(answer.getMessage());
+                for (Option option : question.getOptions()) {
+                   if (option.isCorrect()) {
+                        optionEditText.setTag(option.getMessage());
                         break;
                     }
                 }
@@ -193,29 +200,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private int getAnswerCheckBoxResid(int counter) {
+    private int getOptionCheckBoxResid(int counter) {
         switch (counter) {
             case 0:
-                return R.id.checkBox_main_answer0;
+                return R.id.checkBox_main_option0;
             case 1:
-                return R.id.checkBox_main_answer1;
+                return R.id.checkBox_main_option1;
             case 2:
-                return R.id.checkBox_main_answer2;
+                return R.id.checkBox_main_option2;
             default:
-                return R.id.checkBox_main_answer3;
+                return R.id.checkBox_main_option3;
         }
     }
 
-    private int getAnswerRadioButtonResid(int counter) {
+    private int getOptionRadioButtonResid(int counter) {
         switch (counter) {
             case 0:
-                return R.id.radioButton_main_answer0;
+                return R.id.radioButton_main_option0;
             case 1:
-                return R.id.radioButton_main_answer1;
+                return R.id.radioButton_main_option1;
             case 2:
-                return R.id.radioButton_main_answer2;
+                return R.id.radioButton_main_option2;
             default:
-                return R.id.radioButton_main_answer3;
+                return R.id.radioButton_main_option3;
         }
     }
 
@@ -224,11 +231,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.LENGTH_SHORT).show();
 
         if (currentQuestionLocation < questions.size() - 1) {
-            counterOfCorrectAnswers = 0;
+            counterOfCorrectOptions = 0;
             currentQuestionLocation++;
             displayQuestion(currentQuestionLocation);
             displayProgress();
-            resetAnswers();
+            resetOptions();
         } else {
             Button nextButton = findViewById(R.id.button_main_next);
             nextButton.setVisibility(View.GONE);
@@ -239,57 +246,58 @@ public class MainActivity extends AppCompatActivity {
             Button resetButton = findViewById(R.id.button_main_reset);
             resetButton.setVisibility(View.VISIBLE);
 
-            enableAnswers(false);
+            enableOptions(false);
         }
     }
 
-    private void enableAnswers(boolean enable) {
-        for (int i = 0; i < ANSWER_LIMIT; i++) {
-            int answerCheckBoxResid = getAnswerCheckBoxResid(i);
-            CheckBox answerCheckBox = findViewById(answerCheckBoxResid);
-            answerCheckBox.setEnabled(enable);
+    private void enableOptions(boolean enable) {
+        for (int i = 0; i < OPTION_LIMIT; i++) {
+            int optionCheckBoxResid = getOptionCheckBoxResid(i);
+            CheckBox optionCheckBox = findViewById(optionCheckBoxResid);
+            optionCheckBox.setEnabled(enable);
 
-            int answerRadioButtonResid = getAnswerRadioButtonResid(i);
-            RadioButton answerRadioButton = findViewById(answerRadioButtonResid);
-            answerRadioButton.setEnabled(enable);
+            int optionRadioButtonResid = getOptionRadioButtonResid(i);
+            RadioButton optionRadioButton = findViewById(optionRadioButtonResid);
+            optionRadioButton.setEnabled(enable);
         }
 
-        EditText answerEditText = findViewById(R.id.editText_main_answer);
-        answerEditText.setEnabled(enable);
+        EditText optionEditText = findViewById(R.id.editText_main_option);
+        optionEditText.setEnabled(enable);
     }
 
-    private void resetAnswers() {
-        for (int i = 0; i < ANSWER_LIMIT; i++) {
-            int answerCheckBoxResid = getAnswerCheckBoxResid(i);
-            CheckBox answerCheckBox = findViewById(answerCheckBoxResid);
-            answerCheckBox.setChecked(false);
-            answerCheckBox.jumpDrawablesToCurrentState();
+    private void resetOptions() {
+        for (int i = 0; i < OPTION_LIMIT; i++) {
+            int optionCheckBoxResid = getOptionCheckBoxResid(i);
+            CheckBox optionCheckBox = findViewById(optionCheckBoxResid);
+            optionCheckBox.setChecked(false);
+            optionCheckBox.jumpDrawablesToCurrentState();
 
-            int answerRadioButtonResid = getAnswerRadioButtonResid(i);
-            RadioButton answerRadioButton = findViewById(answerRadioButtonResid);
-            answerRadioButton.setChecked(false);
-            answerRadioButton.jumpDrawablesToCurrentState();
+            int optionRadioButtonResid = getOptionRadioButtonResid(i);
+            RadioButton optionRadioButton = findViewById(optionRadioButtonResid);
+            optionRadioButton.setChecked(false);
+            optionRadioButton.jumpDrawablesToCurrentState();
         }
 
-        EditText answerEditText = findViewById(R.id.editText_main_answer);
-        answerEditText.setText("");
+        EditText optionEditText = findViewById(R.id.editText_main_option);
+        optionEditText.setText("");
+        optionEditText.setInputType(InputType.TYPE_NULL);
     }
 
     public void showResults(View view) {
         String message = getString(R.string.message_results) + "\n\n";
 
-        int totalCorrectAnswerCounter = 0;
+        int totalCorrectOptionCounter = 0;
         for (int i = 0; i < results.length; i++) {
 
             if (results[i]) {
-                totalCorrectAnswerCounter++;
+                totalCorrectOptionCounter++;
             }
 
             message += getString(R.string.message_question) + (i + 1)
                     + ": " + (results[i] ? getString(R.string.message_correct) : getString(R.string.message_incorrect)) + "\n";
         }
 
-        message += "\n" + getString(R.string.message_total_answers) + " " + totalCorrectAnswerCounter;
+        message += "\n" + getString(R.string.message_total_options) + " " + totalCorrectOptionCounter;
 
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }

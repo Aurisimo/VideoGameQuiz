@@ -6,17 +6,17 @@
     <string name="message_question">Question</string>
     <string name="message_correct">Correct</string>
     <string name="message_incorrect">Incorrect</string>
-    <string name="label_answer0_dummy">Answer 0</string>
-    <string name="label_answer1_dummy">Answer 1</string>
-    <string name="label_answer2_dummy">Answer 2</string>
-    <string name="label_answer3_dummy">Answer 3</string>
+    <string name="label_option0_dummy">Option 0</string>
+    <string name="label_option1_dummy">Option 1</string>
+    <string name="label_option2_dummy">Option 2</string>
+    <string name="label_option3_dummy">Option 3</string>
     <string name="label_next">Next</string>
     <string name="label_results">Results</string>
     <string name="label_again">Again</string>
     <string name="label_of">of</string>
-    <string name="message_total_answers">Total correct answers:</string>
-    <string name="header_many_answers_question">Which video games were created by</string>
-    <string name="header_one_answer_question">Which company created video game</string>
-    <string name="entry_answer_dummy">Answer</string>
-    <string name="hint_enter_answer">Enter an answer</string>
+    <string name="message_total_options">Total correct options:</string>
+    <string name="header_many_options_question">Which video games were created by</string>
+    <string name="header_one_option_question">Which company created video game</string>
+    <string name="entry_option_dummy">Option</string>
+    <string name="hint_enter_option">Enter an option</string>
 </resources>
