@@ -71,7 +71,7 @@ public class QuestionUtils {
         for (int i = 1; i < ANSWER_LIMIT; i++) {
             Game game;
             boolean isCorrect;
-            if (random.nextInt(2) == 0) {
+            if (random.nextBoolean()) {
                 int randomCorrectAnswerGameLocation = random.nextInt(company.getGames().size());
                 while (checkedGamesOfPickedCompany.contains(randomCorrectAnswerGameLocation)) {
                     randomCorrectAnswerGameLocation = random.nextInt(company.getGames().size());
@@ -138,7 +138,7 @@ public class QuestionUtils {
     }
 
     private static QuestionType getRandomType() {
-        if (random.nextInt(2) == 0) {
+        if (random.nextBoolean()) {
             return QuestionType.OneCorrectAnswer;
         }
 

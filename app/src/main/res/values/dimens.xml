@@ -2,7 +2,7 @@
 <resources>
     <dimen name="margin_main_big">16dp</dimen>
     <dimen name="text_size_main_big">24sp</dimen>
-    <dimen name="margin_top_main_medium">8sp</dimen>
+    <dimen name="margin_top_main_medium">8dp</dimen>
     <dimen name="height_main_devider_medium">1dp</dimen>
     <dimen name="height_main_image_medium">200dp</dimen>
 </resources>

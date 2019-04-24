@@ -34,7 +34,7 @@
             android:id="@+id/divider0"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_main_devider_medium"
-            android:background="#BDBDBD" />
+            android:background="@color/colorBackgroundDevider" />
 
         <ImageView
             android:id="@+id/imageView_main_question_image"
@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_main_devider_medium"
             android:layout_marginTop="@dimen/margin_top_main_medium"
-            android:background="#BDBDBD" />
+            android:background="@color/colorBackgroundDevider" />
 
         <LinearLayout
             android:id="@+id/linearLayout_main_many_answers_question"
@@ -119,13 +119,23 @@
                 android:text="@string/label_answer3_dummy" />
         </RadioGroup>
 
+        <EditText
+            android:id="@+id/editText_main_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_main_medium"
+            android:ems="10"
+            android:hint="@string/hint_enter_answer"
+            android:inputType="textPersonName"
+            android:text="@string/entry_answer_dummy" />
+
         <View
             android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_main_devider_medium"
             android:layout_marginTop="@dimen/margin_top_main_medium"
             android:layout_weight="1"
-            android:background="#BDBDBD" />
+            android:background="@color/colorBackgroundDevider" />
 
         <Button
             android:id="@+id/button_main_next"

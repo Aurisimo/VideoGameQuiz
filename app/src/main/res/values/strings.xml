@@ -17,4 +17,6 @@
     <string name="message_total_answers">Total correct answers:</string>
     <string name="header_many_answers_question">Which video games were created by</string>
     <string name="header_one_answer_question">Which company created video game</string>
+    <string name="entry_answer_dummy">Answer</string>
+    <string name="hint_enter_answer">Enter an answer</string>
 </resources>

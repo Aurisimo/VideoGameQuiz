@@ -3,17 +3,22 @@ package com.example.android.videogamequiz;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Random;
 
 import static com.example.android.videogamequiz.Constants.ANSWER_LIMIT;
 
@@ -24,11 +29,14 @@ public class MainActivity extends AppCompatActivity {
     private int currentQuestionLocation;
     private int counterOfCorrectAnswers;
     private boolean[] results;
+    private Random random;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        random = new Random();
 
         setupAnswerViewListeners();
 
@@ -71,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
             answerCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                     if ((boolean) buttonView.getTag()) {
                         if (isChecked) {
                             counterOfCorrectAnswers++;
@@ -97,11 +104,33 @@ public class MainActivity extends AppCompatActivity {
                             counterOfCorrectAnswers--;
                         }
 
-                        results[currentQuestionLocation] = questions.get(currentQuestionLocation).getCorrectAnswerAmount() == counterOfCorrectAnswers;
+                        results[currentQuestionLocation] = counterOfCorrectAnswers == 1;
                     }
                 }
             });
         }
+
+        EditText answerEditText = findViewById(R.id.editText_main_answer);
+        answerEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String enteredAnswer = s.toString();
+                EditText answerEditText = findViewById(R.id.editText_main_answer);
+                String correctAnswer = (String)answerEditText.getTag();
+                results[currentQuestionLocation] = correctAnswer != null && enteredAnswer != null
+                        && enteredAnswer.toLowerCase().equals(correctAnswer.toLowerCase());
+            }
+        });
     }
 
     private void displayQuestion(int questionLocation) {
@@ -115,31 +144,52 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout manyAnswersQuestionLinearLayout = findViewById(R.id.linearLayout_main_many_answers_question);
         LinearLayout oneAnswerQuestionRadioGroup = findViewById(R.id.radioGroup_main_one_answer_question);
+        EditText answerEditText = findViewById(R.id.editText_main_answer);
 
-        int counter = 0;
-        for (Answer answer : question.getAnswers()) {
-
-            if (question.getType() == QuestionType.ManyCorrectAnswers) {
-
+        if (question.getType() == QuestionType.ManyCorrectAnswers) {
+            int counter = 0;
+            for (Answer answer : question.getAnswers()) {
                 manyAnswersQuestionLinearLayout.setVisibility(View.VISIBLE);
                 oneAnswerQuestionRadioGroup.setVisibility(View.GONE);
+                answerEditText.setVisibility(View.GONE);
 
                 int answerCheckBoxResid = getAnswerCheckBoxResid(counter);
                 CheckBox answerCheckBox = findViewById(answerCheckBoxResid);
                 answerCheckBox.setText(answer.getMessage());
                 answerCheckBox.setTag(answer.isCorrect());
-            } else {
-                manyAnswersQuestionLinearLayout.setVisibility(View.GONE);
-                oneAnswerQuestionRadioGroup.setVisibility(View.VISIBLE);
 
-                int answerRadioButtonResid = getAnswerRadioButtonResid(counter);
-                RadioButton answerRadioButton = findViewById(answerRadioButtonResid);
-
-                answerRadioButton.setText(answer.getMessage());
-                answerRadioButton.setTag(answer.isCorrect());
+                counter++;
             }
 
-            counter++;
+        } else {
+            if (random.nextBoolean()) {
+                int counter = 0;
+                for (Answer answer : question.getAnswers()) {
+                    manyAnswersQuestionLinearLayout.setVisibility(View.GONE);
+                    oneAnswerQuestionRadioGroup.setVisibility(View.VISIBLE);
+                    answerEditText.setVisibility(View.GONE);
+
+                    int answerRadioButtonResid = getAnswerRadioButtonResid(counter);
+                    RadioButton answerRadioButton = findViewById(answerRadioButtonResid);
+
+                    answerRadioButton.setText(answer.getMessage());
+                    answerRadioButton.setTag(answer.isCorrect());
+
+                    counter++;
+                }
+            } else {
+                manyAnswersQuestionLinearLayout.setVisibility(View.GONE);
+                oneAnswerQuestionRadioGroup.setVisibility(View.GONE);
+                answerEditText.setVisibility(View.VISIBLE);
+                answerEditText.setText("");
+
+                for (Answer answer : question.getAnswers()) {
+                   if (answer.isCorrect()) {
+                        answerEditText.setTag(answer.getMessage());
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -170,6 +220,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void nextQuestion(View view) {
+        Toast.makeText(this, results[currentQuestionLocation] ? getString(R.string.message_correct) : getString(R.string.message_incorrect),
+                Toast.LENGTH_SHORT).show();
+
         if (currentQuestionLocation < questions.size() - 1) {
             counterOfCorrectAnswers = 0;
             currentQuestionLocation++;
@@ -200,6 +253,9 @@ public class MainActivity extends AppCompatActivity {
             RadioButton answerRadioButton = findViewById(answerRadioButtonResid);
             answerRadioButton.setEnabled(enable);
         }
+
+        EditText answerEditText = findViewById(R.id.editText_main_answer);
+        answerEditText.setEnabled(enable);
     }
 
     private void resetAnswers() {
@@ -214,6 +270,9 @@ public class MainActivity extends AppCompatActivity {
             answerRadioButton.setChecked(false);
             answerRadioButton.jumpDrawablesToCurrentState();
         }
+
+        EditText answerEditText = findViewById(R.id.editText_main_answer);
+        answerEditText.setText("");
     }
 
     public void showResults(View view) {
@@ -227,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             message += getString(R.string.message_question) + (i + 1)
-                    + ": " + (results[i] ? getString(R.string.message_correct): getString(R.string.message_incorrect)) + "\n";
+                    + ": " + (results[i] ? getString(R.string.message_correct) : getString(R.string.message_incorrect)) + "\n";
         }
 
         message += "\n" + getString(R.string.message_total_answers) + " " + totalCorrectAnswerCounter;
